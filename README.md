@@ -11,7 +11,7 @@ This is a test web-based School Management System built with JavaScript and html
 ## Tech Stack
 - HTML
 - CSS
-- JavaScript (Vanila)
+- JavaScript (Vanilla)
 
 
 
