@@ -16,5 +16,5 @@ This is a test web-based School Management System built with JavaScript and html
 
 
 ## How to run locally
-1.Clone repo
-2.Open with live server 
+1. Clone repo
+2. Open with live server 
