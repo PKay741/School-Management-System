@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>School Management System</h1>
+
+  <div class="container">
+
+    <section>
+      <h2>Register Student</h2>
+      <form id="studentForm">
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="text" id="studentId" placeholder="Student ID">
+        <input type="text" id="studentAge" placeholder="Age" inputmode="numeric" autocomplete="off">
+        <!-- <input type="number" id="studentAge" placeholder="Age"> -->
+        <button type="submit">Add Student</button>
+      </form>
+      <button class="toggle-btn" data-target="studentList">Show/Hide Students</button>
+      <ul id="studentList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Register Subject</h2>
+      <form id="subjectForm">
+        <input type="text" id="subjectName" placeholder="Subject Name">
+        <input type="text" id="subjectCode" placeholder="Subject Code">
+        <button type="submit">Add Subject</button>
+      </form>
+      <button class="toggle-btn" data-target="subjectList">Show/Hide Subjects</button>
+      <ul id="subjectList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Register Class</h2>
+      <form id="classForm">
+        <input type="text" id="className" placeholder="Class Name">
+        
+        <button type="submit">Add Class</button>
+      </form>
+      <button class="toggle-btn" data-target="classList">Show/Hide Classes</button>
+      <ul id="classList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Assign Student to Class and Subject</h2>
+      <form id="assignForm">
+        <select id="assignStudent"></select>
+        <select id="assignClass"></select>
+        <div id="subjectCheckboxes"></div>
+        <button type="submit">Assign</button>
+      </form>
+      <button class="toggle-btn" data-target="assignList">Show/Hide Assignments</button>
+      <ul id="assignList" class="data-list"></ul>
+    </section>
+
+    <button id="exportExcelBtn">Export All Data to Excel</button>
+    <button id="exportByClassBtn">Export Grouped by Class</button>
+    <button id="exportJsonBtn">Export School JSON</button>
+
+    <label class="btn">
+      Import JSON
+      <input type="file" id="importJsonBtn" accept=".json" hidden>
+    </label>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+  <script src="script.js"></script>
+</body>
+</html> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Management System</title>
+  <!-- Inline CSS so you can test immediately -->
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f7f9fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      background: #0052cc;
+      color: #fff;
+      padding: 20px 0;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      letter-spacing: 0.5px;
+    }
+
+    h2 {
+      color: #0052cc;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 5px;
+      margin-top: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+      background: #fff;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    form {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      flex: 1 1 180px;
+      min-width: 180px;
+    }
+
+    form button {
+      flex: 0 0 auto;
+      align-self: center;
+    }
+
+    button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #0052cc;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.25s ease;
+    }
+
+    button:hover { background: #003f99; }
+
+    .btn {
+      display: inline-block;
+      background: #00994d;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+      margin-right: 8px;
+    }
+
+    .btn:hover { background: #007a3d; }
+
+    .data-list { list-style: none; padding-left: 0; }
+
+    .data-list li {
+      background: #f2f6fc;
+      margin-bottom: 6px;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .toggle-btn { background: #f59e0b; color: #fff; margin-bottom: 10px; }
+    .toggle-btn:hover { background: #d97706; }
+
+    .hidden { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      font-size: 15px;
+    }
+
+    table th, table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table th { background-color: #f1f5f9; color: #333; font-weight: 600; }
+    table tr:nth-child(even) { background: #f9fafb; }
+    table tr:hover { background: #eaf2ff; }
+
+    #searchBox {
+      display: block;
+      width: 60%;
+      max-width: 400px;
+      margin: 0 auto 15px auto;
+      padding: 8px 12px;
+      border-radius: 25px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    #searchBox:focus {
+      border-color: #0052cc;
+      box-shadow: 0 0 4px rgba(0, 82, 204, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      form { flex-direction: column; gap: 8px; }
+      input, select, button { width: 100%; }
+      #searchBox { width: 90%; }
+    }
+
+    /* error / success positioning */
+    form input + .error-container,
+    form select + .error-container {
+      flex-basis: 100%;
+    }
+
+    .error-container {
+      color: #d93025;
+      font-size: 13px;
+      min-height: 16px;
+      margin-top: -6px;
+      margin-bottom: 4px;
+    }
+
+    .form-message {
+      flex-basis: 100%;
+      margin-top: 8px;
+      min-height: 22px;
+    }
+
+    .success-message {
+      background: #e6ffed;
+      border: 1px solid #8be39b;
+      color: #045a18;
+      padding: 8px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>School Management System</h1>
+
+  <div class="container">
+
+    <section>
+      <h2>Register Student</h2>
+      <form id="studentForm" novalidate>
+        <input type="text" id="studentName" placeholder="Student Name">
+        <div class="error-container" id="studentNameError"></div>
+
+        <input type="text" id="studentId" placeholder="Student ID">
+        <div class="error-container" id="studentIdError"></div>
+
+        <input type="number" id="studentAge" placeholder="Age">
+        <div class="error-container" id="studentAgeError"></div>
+
+        <button type="submit">Add Student</button>
+        <div class="form-message" id="studentFormMessage"></div>
+      </form>
+      <button class="toggle-btn" data-target="studentList">Show/Hide Students</button>
+      <ul id="studentList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Register Subject</h2>
+      <form id="subjectForm" novalidate>
+        <input type="text" id="subjectName" placeholder="Subject Name">
+        <div class="error-container" id="subjectNameError"></div>
+
+        <input type="text" id="subjectCode" placeholder="Subject Code">
+        <div class="error-container" id="subjectCodeError"></div>
+
+        <button type="submit">Add Subject</button>
+        <div class="form-message" id="subjectFormMessage"></div>
+      </form>
+      <button class="toggle-btn" data-target="subjectList">Show/Hide Subjects</button>
+      <ul id="subjectList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Register Class</h2>
+      <form id="classForm" novalidate>
+        <input type="text" id="className" placeholder="Class Name">
+        <div class="error-container" id="classNameError"></div>
+
+        <button type="submit">Add Class</button>
+        <div class="form-message" id="classFormMessage"></div>
+      </form>
+      <button class="toggle-btn" data-target="classList">Show/Hide Classes</button>
+      <ul id="classList" class="data-list"></ul>
+    </section>
+
+    <section>
+      <h2>Assign Student to Class and Subject</h2>
+      <form id="assignForm" novalidate>
+        <select id="assignStudent"></select>
+        <div class="error-container" id="assignStudentError"></div>
+
+        <select id="assignClass"></select>
+        <div class="error-container" id="assignClassError"></div>
+
+        <div id="subjectCheckboxes"></div>
+        <div class="error-container" id="assignSubjectsError"></div>
+
+        <button type="submit">Assign</button>
+        <div class="form-message" id="assignFormMessage"></div>
+      </form>
+      <button class="toggle-btn" data-target="assignList">Show/Hide Assignments</button>
+      <ul id="assignList" class="data-list"></ul>
+    </section>
+
+    <button id="exportExcelBtn">Export All Data to Excel</button>
+    <button id="exportByClassBtn">Export Grouped by Class</button>
+    <button id="exportJsonBtn">Export School JSON</button>
+
+    <label class="btn">
+      Import JSON
+      <input type="file" id="importJsonBtn" accept=".json" hidden>
+    </label>
+
+  </div>
+
+  <div id="js-error-modal" class="hidden" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:9999">
+    <div style="background:#fff;padding:18px;border-radius:8px;max-width:380px;width:90%;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,0.2)">
+      <div id="js-error-modal-msg" style="margin-bottom:12px">There are some errors</div>
+      <button id="js-error-modal-ok" style="padding:8px 12px;border-radius:6px;cursor:pointer">OK</button>
+    </div>
+  </div>
+
+  <!-- xlsx bundle CDN (kept as in your project) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
+  <!-- Inline script (your script.js content) -->
+  <script>
+    // -------- data model --------
+    let students = [];
+    let subjects = [];
+    let classes = [];
+    let assignments = [];
+    let school = { classes: {} };
+
+    // Form & DOM refs
+    const studentForm = document.getElementById("studentForm");
+    const subjectForm = document.getElementById("subjectForm");
+    const classForm = document.getElementById("classForm");
+    const assignForm = document.getElementById("assignForm");
+
+    const studentList = document.getElementById("studentList");
+    const subjectList = document.getElementById("subjectList");
+    const classList = document.getElementById("classList");
+    const assignList = document.getElementById("assignList");
+    const subjectCheckboxes = document.getElementById("subjectCheckboxes");
+
+    const exportJsonBtn = document.getElementById("exportJsonBtn");
+    const importJsonBtn = document.getElementById("importJsonBtn");
+    const exportExcelBtn = document.getElementById("exportExcelBtn");
+    const exportByClassBtn = document.getElementById("exportByClassBtn");
+
+    // edit state indices
+    let studentEditIndex = null;
+    let subjectEditIndex = null;
+    let classEditIndex = null;
+    let assignEditIndex = null;
+
+    // controls inserted after assignForm
+    const controlsContainer = document.createElement("div");
+    controlsContainer.style.textAlign = "center";
+    controlsContainer.style.marginTop = "12px";
+    controlsContainer.style.marginBottom = "6px";
+
+    const searchBar = document.createElement("input");
+    searchBar.type = "text";
+    searchBar.id = "searchBar";
+    searchBar.placeholder = "Search students, classes, or subjects...";
+    searchBar.style.marginRight = "12px";
+    searchBar.style.padding = "8px 12px";
+    searchBar.style.borderRadius = "20px";
+    searchBar.style.border = "1px solid #ccc";
+    searchBar.style.width = "45%";
+
+    const sortSelect = document.createElement("select");
+    sortSelect.id = "sortSelect";
+    sortSelect.style.padding = "8px 10px";
+    sortSelect.style.borderRadius = "6px";
+    sortSelect.style.border = "1px solid #ccc";
+
+    ["Original order", "Student A → Z", "Student Z → A", "Group by Class"].forEach((label, idx) => {
+      const opt = document.createElement("option");
+      opt.value = ["default", "az", "za", "class"][idx];
+      opt.textContent = label;
+      sortSelect.appendChild(opt);
+    });
+
+    assignForm.insertAdjacentElement("afterend", controlsContainer);
+    controlsContainer.appendChild(searchBar);
+    controlsContainer.appendChild(sortSelect);
+
+    searchBar.addEventListener("input", () => renderAssignments(searchBar.value, sortSelect.value));
+    sortSelect.addEventListener("change", () => renderAssignments(searchBar.value, sortSelect.value));
+
+    // modal helper
+    const modalOverlay = document.getElementById("js-error-modal");
+    const modalMsg = document.getElementById("js-error-modal-msg");
+    function showModal(message = "There are some errors") {
+      modalMsg.textContent = message;
+      modalOverlay.style.display = "flex";
+    }
+    function hideModal() { modalOverlay.style.display = "none"; }
+
+    // field-level errors & form messages
+    function clearFieldError(fieldEl) {
+      const next = fieldEl.nextElementSibling;
+      if (next && next.classList && next.classList.contains("error-container")) next.innerHTML = "";
+    }
+    function showFieldError(fieldEl, message) {
+      const container = fieldEl.nextElementSibling;
+      if (container && container.classList && container.classList.contains("error-container")) {
+        container.innerHTML = `<div class="error-message">${message}</div>`;
+      } else {
+        const div = document.createElement("div");
+        div.className = "error-message";
+        div.textContent = message;
+        fieldEl.insertAdjacentElement("afterend", div);
+      }
+    }
+    function clearAllFieldErrors(formEl) {
+      const errs = formEl.querySelectorAll(".error-container");
+      errs.forEach((c) => (c.innerHTML = ""));
+    }
+    function showFormSuccess(formEl, message) {
+      const msgBox = formEl.querySelector(".form-message");
+      if (!msgBox) return;
+      msgBox.innerHTML = `<div class="success-message">${message}</div>`;
+      setTimeout(() => {
+        if (msgBox) msgBox.innerHTML = "";
+      }, 2500);
+    }
+
+    function escapeHtml(str) {
+      if (!str && str !== 0) return "";
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    // renderers
+    function renderStudents() {
+      studentList.innerHTML = students
+        .map((s, i) => `
+          <li class="row-item">
+            <span class="item-text">${escapeHtml(s.name)} ${s.id ? `(ID: ${escapeHtml(s.id)})` : ""} ${s.age ? `(Age: ${escapeHtml(s.age)})` : ""}</span>
+            <span class="item-actions">
+              <button onclick="startEditStudent(${i})">Edit</button>
+              <button onclick="deleteStudent(${i})">Delete</button>
+            </span>
+          </li>
+        `).join("");
+      updateSelectOptions();
+    }
+
+    function renderSubjects() {
+      subjectList.innerHTML = subjects
+        .map((s, i) => `
+          <li class="row-item">
+            <span class="item-text">${escapeHtml(s.name)} ${s.code ? `(${escapeHtml(s.code)})` : ""}</span>
+            <span class="item-actions">
+              <button onclick="startEditSubject(${i})">Edit</button>
+              <button onclick="deleteSubject(${i})">Delete</button>
+            </span>
+          </li>
+        `).join("");
+      renderSubjectCheckboxes();
+    }
+
+    function renderClasses() {
+      classList.innerHTML = classes
+        .map((c, i) => `
+          <li class="row-item">
+            <span class="item-text">${escapeHtml(c.name)}</span>
+            <span class="item-actions">
+              <button onclick="startEditClass(${i})">Edit</button>
+              <button onclick="deleteClass(${i})">Delete</button>
+            </span>
+          </li>
+        `).join("");
+      updateSelectOptions();
+    }
+
+    function renderSubjectCheckboxes() {
+      subjectCheckboxes.innerHTML = subjects
+        .map((s) => `<label style="margin-right:8px;display:inline-block"><input type="checkbox" value="${escapeHtml(s.name)}"> ${escapeHtml(s.name)}</label>`)
+        .join("<br>");
+    }
+
+    function updateSelectOptions() {
+      const assignStudent = document.getElementById("assignStudent");
+      const assignClass = document.getElementById("assignClass");
+      if (!assignStudent || !assignClass) return;
+      assignStudent.innerHTML = students.map((s) => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`).join("");
+      assignClass.innerHTML = classes.map((c) => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join("");
+    }
+
+    function renderAssignments(filterText = "", sortMode = "default") {
+      let rows = assignments.map((a) => ({ ...a }));
+      if (filterText && filterText.trim() !== "") {
+        const q = filterText.toLowerCase();
+        rows = rows.filter((a) => {
+          const combined = `${a.student} ${a.className} ${a.subjects.join(" ")}`.toLowerCase();
+          return combined.includes(q);
+        });
+      }
+      if (sortMode === "az") rows.sort((x, y) => x.student.localeCompare(y.student));
+      else if (sortMode === "za") rows.sort((x, y) => y.student.localeCompare(x.student));
+      else if (sortMode === "class") rows.sort((x, y) => {
+        const c = x.className.localeCompare(y.className);
+        if (c !== 0) return c;
+        return x.student.localeCompare(y.student);
+      });
+
+      if (!rows.length) {
+        assignList.innerHTML = "<p style='text-align:center'>No assignments yet.</p>";
+        return;
+      }
+
+      const tbodyHtml = rows.map((r) => {
+        const key = `${r.student}|${r.className}|${JSON.stringify(r.subjects)}`;
+        const originalIndex = assignments.findIndex(
+          (a) => `${a.student}|${a.className}|${JSON.stringify(a.subjects)}` === key
+        );
+        const deleteBtn = originalIndex >= 0 ? `<button onclick="deleteAssignment(${originalIndex})">Delete</button>` : `<button disabled>Delete</button>`;
+        const editBtn = originalIndex >= 0 ? `<button onclick="startEditAssignment(${originalIndex})">Edit</button>` : `<button disabled>Edit</button>`;
+        return `
+          <tr>
+            <td style="text-align:left;padding:8px 10px">${escapeHtml(r.student)}</td>
+            <td style="text-align:center;padding:8px 10px">${escapeHtml(r.className)}</td>
+            <td style="text-align:left;padding:8px 10px">${escapeHtml(r.subjects.join(", "))}</td>
+            <td style="text-align:center;padding:8px 10px">${editBtn} ${deleteBtn}</td>
+          </tr>
+        `;
+      }).join("");
+
+      assignList.innerHTML = `
+        <table class="assign-table" style="width:100%;border-collapse:collapse;margin-top:12px">
+          <thead>
+            <tr>
+              <th style="padding:8px 10px;border-bottom:1px solid #ddd">Student</th>
+              <th style="padding:8px 10px;border-bottom:1px solid #ddd">Class</th>
+              <th style="padding:8px 10px;border-bottom:1px solid #ddd">Subjects</th>
+              <th style="padding:8px 10px;border-bottom:1px solid #ddd">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tbodyHtml}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // Students
+    studentForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearAllFieldErrors(studentForm);
+
+      const nameEl = document.getElementById("studentName");
+      const idEl = document.getElementById("studentId");
+      const ageEl = document.getElementById("studentAge");
+
+      const name = (nameEl.value || "").trim();
+      const id = (idEl.value || "").trim();
+      const age = (ageEl.value || "").trim();
+
+      let hasError = false;
+      if (!name) { showFieldError(nameEl, "Please enter student name"); hasError = true; }
+      if (!id) { showFieldError(idEl, "Please enter student ID"); hasError = true; }
+      if (!age) { showFieldError(ageEl, "Please enter student age"); hasError = true; }
+
+      if (hasError) { showModal("There are some errors"); return; }
+
+      if (studentEditIndex === null) {
+        students.push({ name, id, age });
+        showFormSuccess(studentForm, "Student successfully added");
+      } else {
+        const oldName = students[studentEditIndex].name;
+        students[studentEditIndex] = { name, id, age };
+        assignments.forEach((a) => { if (a.student === oldName) a.student = name; });
+        for (const cls of Object.keys(school.classes)) {
+          school.classes[cls] = school.classes[cls].map((st) => {
+            if (st.name === oldName) return { ...st, name, subjects: st.subjects || [] };
+            return st;
+          });
+        }
+        showFormSuccess(studentForm, "Student successfully updated");
+        studentEditIndex = null;
+        studentForm.querySelector("button[type=submit]").textContent = "Add Student";
+      }
+
+      renderStudents();
+      renderAssignments(searchBar.value, sortSelect.value);
+      studentForm.reset();
+    });
+
+    window.startEditStudent = function (i) {
+      const s = students[i];
+      document.getElementById("studentName").value = s.name;
+      document.getElementById("studentId").value = s.id || "";
+      document.getElementById("studentAge").value = s.age || "";
+      studentEditIndex = i;
+      studentForm.querySelector("button[type=submit]").textContent = "Save Student";
+      document.getElementById("studentName").focus();
+    };
+
+    window.deleteStudent = function (i) {
+      if (!confirm("Delete student?")) return;
+      const name = students[i].name;
+      assignments = assignments.filter((a) => a.student !== name);
+      for (const clsName of Object.keys(school.classes)) {
+        school.classes[clsName] = school.classes[clsName].filter((st) => st.name !== name);
+        if (school.classes[clsName].length === 0) delete school.classes[clsName];
+      }
+      students.splice(i, 1);
+      renderStudents();
+      renderAssignments(searchBar.value, sortSelect.value);
+    };
+
+    // Subjects
+    subjectForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearAllFieldErrors(subjectForm);
+      const nameEl = document.getElementById("subjectName");
+      const codeEl = document.getElementById("subjectCode");
+      const name = (nameEl.value || "").trim();
+      const code = (codeEl.value || "").trim();
+
+      let hasError = false;
+      if (!name) { showFieldError(nameEl, "Please enter subject name"); hasError = true; }
+      if (!code) { showFieldError(codeEl, "Please enter subject code"); hasError = true; }
+      if (hasError) { showModal("There are some errors"); return; }
+
+      if (subjectEditIndex === null) {
+        subjects.push({ name, code });
+        showFormSuccess(subjectForm, "Subject successfully added");
+      } else {
+        const oldName = subjects[subjectEditIndex].name;
+        subjects[subjectEditIndex] = { name, code };
+        assignments.forEach((a) => { a.subjects = (a.subjects || []).map((sub) => (sub === oldName ? name : sub)); });
+        for (const clsName of Object.keys(school.classes)) {
+          school.classes[clsName].forEach((st) => {
+            st.subjects = (st.subjects || []).map((sub) => (sub === oldName ? name : sub));
+          });
+        }
+        showFormSuccess(subjectForm, "Subject successfully updated");
+        subjectEditIndex = null;
+        subjectForm.querySelector("button[type=submit]").textContent = "Add Subject";
+      }
+
+      renderSubjects();
+      renderAssignments(searchBar.value, sortSelect.value);
+      subjectForm.reset();
+    });
+
+    window.startEditSubject = function (i) {
+      const s = subjects[i];
+      document.getElementById("subjectName").value = s.name;
+      document.getElementById("subjectCode").value = s.code || "";
+      subjectEditIndex = i;
+      subjectForm.querySelector("button[type=submit]").textContent = "Save Subject";
+      document.getElementById("subjectName").focus();
+    };
+
+    window.deleteSubject = function (i) {
+      if (!confirm("Delete subject?")) return;
+      const name = subjects[i].name;
+      assignments.forEach((a) => { a.subjects = (a.subjects || []).filter((sub) => sub !== name); });
+      for (const clsName of Object.keys(school.classes)) {
+        school.classes[clsName].forEach((st) => { st.subjects = (st.subjects || []).filter((sub) => sub !== name); });
+      }
+      subjects.splice(i, 1);
+      renderSubjects();
+      renderAssignments(searchBar.value, sortSelect.value);
+    };
+
+    // Classes
+    classForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearAllFieldErrors(classForm);
+      const nameEl = document.getElementById("className");
+      const name = (nameEl.value || "").trim();
+
+      let hasError = false;
+      if (!name) { showFieldError(nameEl, "Please enter class name"); hasError = true; }
+      if (hasError) { showModal("There are some errors"); return; }
+
+      if (classEditIndex === null) {
+        classes.push({ name });
+        showFormSuccess(classForm, "Class successfully added");
+      } else {
+        const oldName = classes[classEditIndex].name;
+        classes[classEditIndex] = { name };
+        assignments.forEach((a) => { if (a.className === oldName) a.className = name; });
+        if (school.classes[oldName]) { school.classes[name] = school.classes[oldName]; delete school.classes[oldName]; }
+        showFormSuccess(classForm, "Class successfully updated");
+        classEditIndex = null;
+        classForm.querySelector("button[type=submit]").textContent = "Add Class";
+      }
+
+      renderClasses();
+      renderAssignments(searchBar.value, sortSelect.value);
+      classForm.reset();
+    });
+
+    window.startEditClass = function (i) {
+      const c = classes[i];
+      document.getElementById("className").value = c.name;
+      classEditIndex = i;
+      classForm.querySelector("button[type=submit]").textContent = "Save Class";
+      document.getElementById("className").focus();
+    };
+
+    window.deleteClass = function (i) {
+      if (!confirm("Delete class?")) return;
+      const className = classes[i].name;
+      assignments = assignments.filter((a) => a.className !== className);
+      delete school.classes[className];
+      classes.splice(i, 1);
+      renderClasses();
+      renderAssignments(searchBar.value, sortSelect.value);
+    };
+
+    // Assignments
+    assignForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearAllFieldErrors(assignForm);
+      const studentEl = document.getElementById("assignStudent");
+      const classEl = document.getElementById("assignClass");
+      const student = (studentEl.value || "").trim();
+      const className = (classEl.value || "").trim();
+      const selected = Array.from(subjectCheckboxes.querySelectorAll("input:checked")).map((ch) => ch.value);
+
+      let hasError = false;
+      if (!student) { showFieldError(studentEl, "Please choose a student"); hasError = true; }
+      if (!className) { showFieldError(classEl, "Please choose a class"); hasError = true; }
+      if (!selected.length) { showFieldError(subjectCheckboxes, "Please select at least one subject"); hasError = true; }
+
+      if (hasError) { showModal("There are some errors"); return; }
+
+      if (assignEditIndex === null) {
+        const existing = assignments.find((a) => a.student === student && a.className === className);
+        if (existing) existing.subjects = Array.from(new Set([...(existing.subjects || []), ...selected]));
+        else assignments.push({ student, className, subjects: selected });
+
+        if (!school.classes[className]) school.classes[className] = [];
+        const classArr = school.classes[className];
+        const existingStudent = classArr.find((s) => s.name === student);
+        if (existingStudent) existingStudent.subjects = Array.from(new Set([...(existingStudent.subjects || []), ...selected]));
+        else classArr.push({ name: student, subjects: selected });
+
+        showFormSuccess(assignForm, "Assignment successfully added");
+      } else {
+        const oldAssignment = assignments[assignEditIndex];
+        if (!oldAssignment) {
+          assignEditIndex = null;
+          assignForm.querySelector("button[type=submit]").textContent = "Assign";
+          renderAssignments(searchBar.value, sortSelect.value);
+          assignForm.reset();
+          return;
+        }
+        const oldStudent = oldAssignment.student;
+        const oldClass = oldAssignment.className;
+
+        const otherIndex = assignments.findIndex((a, idx) => idx !== assignEditIndex && a.student === student && a.className === className);
+        if (otherIndex >= 0) {
+          assignments[otherIndex].subjects = Array.from(new Set([...(assignments[otherIndex].subjects || []), ...selected]));
+          assignments.splice(assignEditIndex, 1);
+
+          if (school.classes[oldClass]) {
+            school.classes[oldClass] = school.classes[oldClass].filter((st) => st.name !== oldStudent);
+            if (school.classes[oldClass].length === 0) delete school.classes[oldClass];
+          }
+          if (!school.classes[className]) school.classes[className] = [];
+          const clsArr = school.classes[className];
+          const up = clsArr.find((st) => st.name === student);
+          if (up) up.subjects = Array.from(new Set([...(up.subjects || []), ...selected]));
+          else clsArr.push({ name: student, subjects: selected });
+
+          showFormSuccess(assignForm, "Assignment successfully updated");
+        } else {
+          assignments[assignEditIndex] = { student, className, subjects: selected };
+
+          if (oldClass !== className && school.classes[oldClass]) {
+            school.classes[oldClass] = school.classes[oldClass].filter((st) => st.name !== oldStudent);
+            if (school.classes[oldClass].length === 0) delete school.classes[oldClass];
+          }
+          if (!school.classes[className]) school.classes[className] = [];
+          const clsArr = school.classes[className];
+          const found = clsArr.find((st) => st.name === student);
+          if (found) found.subjects = Array.from(new Set([...(found.subjects || []), ...selected]));
+          else clsArr.push({ name: student, subjects: selected });
+
+          showFormSuccess(assignForm, "Assignment successfully updated");
+        }
+
+        assignEditIndex = null;
+        assignForm.querySelector("button[type=submit]").textContent = "Assign";
+      }
+
+      renderAssignments(searchBar.value, sortSelect.value);
+      assignForm.reset();
+    });
+
+    window.startEditAssignment = function (index) {
+      const a = assignments[index];
+      if (!a) return;
+      updateSelectOptions();
+      document.getElementById("assignStudent").value = a.student;
+      document.getElementById("assignClass").value = a.className;
+      renderSubjectCheckboxes();
+      const boxes = subjectCheckboxes.querySelectorAll("input[type=checkbox]");
+      boxes.forEach((ch) => { ch.checked = a.subjects.includes(ch.value); });
+      assignEditIndex = index;
+      assignForm.querySelector("button[type=submit]").textContent = "Save Assignment";
+      document.getElementById("assignStudent").focus();
+    };
+
+    window.deleteAssignment = function (index) {
+      if (!confirm("Delete this assignment?")) return;
+      const a = assignments[index];
+      if (a) {
+        if (school.classes[a.className]) {
+          school.classes[a.className] = school.classes[a.className].filter((s) => s.name !== a.student);
+          if (school.classes[a.className].length === 0) delete school.classes[a.className];
+        }
+      }
+      assignments.splice(index, 1);
+      renderAssignments(searchBar.value, sortSelect.value);
+    };
+
+    // JSON export/import (kept same as your script)
+    exportJsonBtn.addEventListener("click", () => {
+      const parts = [];
+      parts.push("{");
+      parts.push('  "classes": {');
+      const classNames = Object.keys(school.classes);
+      classNames.forEach((clsName, ci) => {
+        const studentsInClass = school.classes[clsName] || [];
+        parts.push(`    ${JSON.stringify(clsName)}: [`);
+        const lines = studentsInClass.map((s) => {
+          const subjInline = (s.subjects || []).map((sub) => JSON.stringify(sub)).join(", ");
+          return `      { "name": ${JSON.stringify(s.name)}, "subjects": [${subjInline}] }`;
+        });
+        if (lines.length) parts.push(lines.join(",\n"));
+        parts.push(`    ]${ci < classNames.length - 1 ? "," : ""}`);
+      });
+      parts.push("  }");
+      parts.push("}");
+      const jsonString = parts.join("\n");
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "school_data.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importJsonBtn.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const data = JSON.parse(evt.target.result);
+          if (!data || !data.classes || typeof data.classes !== "object") {
+            alert("Invalid JSON format — expected { classes: { ... } }");
+            return;
+          }
+          // reset memory
+          students = [];
+          subjects = [];
+          classes = [];
+          assignments = [];
+          school = { classes: {} };
+
+          for (const [clsName, entries] of Object.entries(data.classes)) {
+            if (!Array.isArray(entries)) continue;
+            classes.push({ name: clsName });
+            school.classes[clsName] = [];
+            entries.forEach((entry) => {
+              if (typeof entry === "string") {
+                const parts = entry.split("—").length > 1 ? entry.split("—") : entry.split("-");
+                const name = (parts[0] || "").trim();
+                const subjList = (parts[1] || "").split(",").map((s) => s.trim()).filter(Boolean);
+                if (!name) return;
+                if (!students.find((st) => st.name === name)) students.push({ name, id: "", age: "" });
+                subjList.forEach((sub) => { if (!subjects.find((x) => x.name === sub)) subjects.push({ name: sub, code: "" }); });
+                assignments.push({ student: name, className: clsName, subjects: subjList });
+                school.classes[clsName].push({ name, subjects: subjList });
+              } else if (typeof entry === "object" && entry !== null && entry.name) {
+                const name = String(entry.name);
+                const subjList = Array.isArray(entry.subjects) ? entry.subjects.map(String) : [];
+                if (!students.find((st) => st.name === name)) students.push({ name, id: "", age: "" });
+                subjList.forEach((sub) => { if (!subjects.find((x) => x.name === sub)) subjects.push({ name: sub, code: "" }); });
+                assignments.push({ student: name, className: clsName, subjects: subjList });
+                school.classes[clsName].push({ name, subjects: subjList });
+              }
+            });
+          }
+
+          renderStudents();
+          renderSubjects();
+          renderClasses();
+          renderAssignments(searchBar.value, sortSelect.value);
+          updateSelectOptions();
+          alert("Data imported successfully!");
+        } catch (err) {
+          alert("Error reading JSON file: " + err.message);
+        } finally {
+          importJsonBtn.value = "";
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Excel helpers & exports (unchanged)
+    function aoaToSheetWithAutoFit(rows, headingMerge, headingCellRef, headingStyle) {
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      if (headingMerge) {
+        if (!ws["!merges"]) ws["!merges"] = [];
+        ws["!merges"].push(headingMerge);
+      }
+      if (headingCellRef && headingStyle) {
+        if (!ws[headingCellRef]) ws[headingCellRef] = { t: "s", v: rows[0][0] };
+        ws[headingCellRef].s = headingStyle;
+      }
+      const colCount = rows.reduce((max, r) => Math.max(max, r.length), 0);
+      const colWidths = new Array(colCount).fill(10);
+      for (let c = 0; c < colCount; c++) {
+        let max = 10;
+        rows.forEach((r) => {
+          const cell = r[c];
+          if (cell == null) return;
+          const len = String(cell).length;
+          if (len > max) max = len;
+        });
+        colWidths[c] = { wch: Math.min(Math.max(max + 2, 10), 60) };
+      }
+      ws["!cols"] = colWidths;
+      return ws;
+    }
+
+    function buildAndDownloadWorkbook(sheets, filename) {
+      const wb = XLSX.utils.book_new();
+      sheets.forEach((sh) => {
+        const ws = aoaToSheetWithAutoFit(sh.rows, sh.headingMerge, sh.headingCellRef, sh.headingStyle);
+        XLSX.utils.book_append_sheet(wb, ws, sh.name.substring(0, 31));
+      });
+      XLSX.writeFile(wb, filename);
+    }
+
+    if (exportExcelBtn) {
+      exportExcelBtn.addEventListener("click", () => {
+        const rows = [];
+        rows.push(["All Assignments"]);
+        rows.push([]);
+        rows.push(["Student", "Class", "Subjects"]);
+        assignments.forEach((a) => {
+          rows.push([a.student, a.className, (a.subjects || []).join(", ")]);
+        });
+        const headingMerge = { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } };
+        const headingStyle = { font: { bold: true, sz: 12 }, alignment: { horizontal: "center", vertical: "center" } };
+        buildAndDownloadWorkbook([{ name: "All Assignments", rows, headingMerge, headingCellRef: "A1", headingStyle }], "all_assignments.xlsx");
+      });
+    }
+
+    if (exportByClassBtn) {
+      exportByClassBtn.addEventListener("click", () => {
+        const sheets = [];
+        const classesWithAssignments = {};
+        assignments.forEach((a) => {
+          if (!classesWithAssignments[a.className]) classesWithAssignments[a.className] = [];
+          classesWithAssignments[a.className].push(a);
+        });
+
+        Object.keys(classesWithAssignments).forEach((clsName) => {
+          const assns = classesWithAssignments[clsName];
+          const rows = [];
+          rows.push([clsName]);
+          rows.push([]);
+          rows.push(["Student", "Subjects"]);
+          assns.forEach((a) => {
+            rows.push([a.student, (a.subjects || []).join(", ")]);
+          });
+          const headingMerge = { s: { r: 0, c: 0 }, e: { r: 0, c: 1 } };
+          const headingStyle = { font: { bold: true, sz: 12 }, alignment: { horizontal: "center", vertical: "center" } };
+          sheets.push({ name: clsName.substring(0, 31), rows, headingMerge, headingCellRef: "A1", headingStyle });
+        });
+
+        if (sheets.length === 0) {
+          alert("No class assignments to export.");
+          return;
+        }
+        buildAndDownloadWorkbook(sheets, "school_data_by_class.xlsx");
+      });
+    }
+
+    // Toggle buttons
+    document.querySelectorAll(".toggle-btn").forEach((btn) => {
+      const targetId = btn.getAttribute("data-target");
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      btn.addEventListener("click", () => target.classList.toggle("hidden"));
+    });
+
+    // modal close hookup (from your page JS)
+    document.getElementById('js-error-modal-ok').addEventListener('click', () => {
+      document.getElementById('js-error-modal').style.display = 'none';
+    });
+
+    // Initialize (render empty view)
+    renderStudents();
+    renderSubjects();
+    renderClasses();
+    renderAssignments();
+  </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f9fc;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  background: #0052cc;
+  color: #fff;
+  padding: 20px 0;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+}
+
+h2 {
+  color: #0052cc;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 5px;
+  margin-top: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto 40px auto;
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Use flex layout for the form; each .field is a flex item */
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+
+.field {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 30%;        
+  min-width: 180px;
+  box-sizing: border-box;
+}
+
+
+.field.field-action {
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+form button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #0052cc;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.25s ease;
+}
+
+form button:hover {
+  background: #003f99;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #0052cc;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.25s ease;
+}
+
+button:hover {
+  background: #003f99;
+}
+
+.btn {
+  display: inline-block;
+  background: #00994d;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-right: 8px;
+}
+
+.btn:hover {
+  background: #007a3d;
+}
+
+.data-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.data-list li {
+  background: #f2f6fc;
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.toggle-btn {
+  background: #f59e0b;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.toggle-btn:hover {
+  background: #d97706;
+}
+
+.hidden {
+  display: none;
+}
+
+
+.error-container {
+  color: #d93025;
+  font-size: 13px;
+  min-height: 16px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+
+.form-message {
+  flex-basis: 100%;
+  margin-top: 8px;
+  min-height: 22px;
+}
+
+.success-message {
+  background: #e6ffed;
+  border: 1px solid #8be39b;
+  color: #045a18;
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 14px;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  font-size: 15px;
+}
+
+table th,
+table td {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f1f5f9;
+  color: #333;
+  font-weight: 600;
+}
+
+table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+table tr:hover {
+  background: #eaf2ff;
+}
+
+#searchBox {
+  display: block;
+  width: 60%;
+  max-width: 400px;
+  margin: 0 auto 15px auto;
+  padding: 8px 12px;
+  border-radius: 25px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+#searchBox:focus {
+  border-color: #0052cc;
+  box-shadow: 0 0 4px rgba(0, 82, 204, 0.3);
+}
+
+@media (max-width: 900px) {
+  /* allow two columns on medium screens */
+  .field { flex: 0 0 45%; }
+}
+
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field {
+    flex: 0 0 100%;
+    min-width: auto;
+  }
+
+  input,
+  select,
+  button {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+    

@@ -1,0 +1,19 @@
+{
+  "classes": {
+    "Class 1": [
+      { "name": "PKay Amoah", "subjects": ["English", "Maths", "Science"] },
+      { "name": "Tim Duncan", "subjects": ["English", "Maths", "Science"] },
+      { "name": "Wes Sno", "subjects": ["English", "Maths", "Science"] }
+    ],
+    "Class 2": [
+      { "name": "Timothy Appiah", "subjects": ["R.M.E", "History", "Creative Arts"] },
+      { "name": "Ama Agyemang", "subjects": ["R.M.E", "History", "Creative Arts"] },
+      { "name": "Edward Teach", "subjects": ["R.M.E", "History", "Creative Arts"] }
+    ],
+    "Class 3": [
+      { "name": "Marty Cannon", "subjects": ["B.D.T", "Social Studies", "I.C.T"] },
+      { "name": "Marty Green", "subjects": ["B.D.T", "Social Studies", "I.C.T"] },
+      { "name": "Enoch Ababio", "subjects": ["B.D.T", "Social Studies", "I.C.T"] }
+    ]
+  }
+}
