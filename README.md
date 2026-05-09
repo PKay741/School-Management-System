@@ -9,12 +9,12 @@ This is a test web-based School Management System built with JavaScript and html
 - Real-time updates
 
 ## Tech Stack
-- Frontend: JavaScript
-- Database: JSON db
+- HTML
+- CSS
+- JavaScript (Vanila)
 
 
 
 ## How to run locally
-1. Clone repo
-2. Install dependencies
-3.Open with live server 
+1.Clone repo
+2.Open with live server 
